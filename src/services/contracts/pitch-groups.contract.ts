@@ -8,6 +8,6 @@ export interface IPitchGroupsService {
     filter?: Partial<IPaginationFilter>
   ) => Promise<IResponse<IPagination<IBranch>>>
   createPitchGroup: (request: CreatePitchGroupRequest) => Promise<IResponse<IPitchGroup>>
-  updatePitchGroup: (pitchGroupId: string, request: UpdatePitchGroupRequest) => Promise<void>
-  deletePitchGroup: (pitchGroupId: string) => Promise<void>
+  updatePitchGroup: (pitchGroupId: string, request: UpdatePitchGroupRequest) => Promise<IResponse>
+  deletePitchGroup: (pitchGroupId: string) => Promise<IResponse>
 }

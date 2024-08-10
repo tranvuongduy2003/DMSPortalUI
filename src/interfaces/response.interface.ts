@@ -1,6 +1,6 @@
 import { EPageOrder } from '@/enums/pagination.enum'
 
-export interface IResponse<T> {
+export interface IResponse<T = any> {
   statusCode: number
   message: string
   data: T
