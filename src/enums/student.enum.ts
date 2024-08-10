@@ -1,0 +1,7 @@
+export enum EStudentStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  ENROLLED = 'ENROLLED',
+  WAITLISTED = 'WAITLISTED',
+  SUSPENDED = 'SUSPENDED'
+}
