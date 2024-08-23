@@ -4,21 +4,24 @@ import { UpdatePermissionByRolePayload, UpdatePermissionPayload } from '@/types'
 import { IPermissionsService } from './contracts'
 
 class PermissionsService implements IPermissionsService {
+  private readonly apiPath = '/api/v1/permissions'
+
   // queries
-  getPermissions = () => {
-    return httpRequest.get<IPermission[]>('/api/permissions')
+  public getPermissions = () => {
+    return httpRequest.get<IPermission[]>(`${this.apiPath}`)
   }
 
-  getPermissionsByRole = () => {
-    return httpRequest.get<IRolePermission[]>('/api/permissions/roles')
+  public getPermissionsByRole = () => {
+    return httpRequest.get<IRolePermission[]>(`${this.apiPath}/roles`)
   }
 
   // commands
-  updatePermission = (data: UpdatePermissionPayload) => {
-    return httpRequest.put<UpdatePermissionPayload, IPermission[]>('/api/permissions', data)
+  public updatePermission = (data: UpdatePermissionPayload) => {
+    return httpRequest.put<UpdatePermissionPayload, IPermission[]>(`${this.apiPath}`, data)
   }
-  updatePermissionByRole = (data: UpdatePermissionByRolePayload) => {
-    return httpRequest.put<UpdatePermissionByRolePayload, IRolePermission[]>('/api/permissions/roles', data)
+
+  public updatePermissionByRole = (data: UpdatePermissionByRolePayload) => {
+    return httpRequest.put<UpdatePermissionByRolePayload, IRolePermission[]>(`${this.apiPath}/roles`, data)
   }
 }
 

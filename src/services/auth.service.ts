@@ -4,23 +4,30 @@ import { ForgotPasswordPayload, LoginPayload, RefreshTokenPayload, ResetPassword
 import { IAuthService } from './contracts'
 
 class AuthService implements IAuthService {
-  login = (data: LoginPayload) => {
-    return httpRequest.post<LoginPayload, IToken>('/api/auth/signin', data)
+  private readonly apiPath = '/api/v1/auth'
+
+  public login = (data: LoginPayload) => {
+    return httpRequest.post<LoginPayload, IToken>(`${this.apiPath}/signin`, data)
   }
-  logout = () => {
-    return httpRequest.post<any, any>('/api/auth/logout', {})
+
+  public logout = () => {
+    return httpRequest.post<any, any>(`${this.apiPath}/logout`, {})
   }
-  refreshToken = (data: RefreshTokenPayload) => {
-    return httpRequest.post<RefreshTokenPayload, IToken>('/api/auth/refresh-token', data)
+
+  public refreshToken = (data: RefreshTokenPayload) => {
+    return httpRequest.post<RefreshTokenPayload, IToken>(`${this.apiPath}/refresh-token`, data)
   }
-  forgotPassword = (data: ForgotPasswordPayload) => {
-    return httpRequest.post<ForgotPasswordPayload, any>('/api/auth/forgot-password', data)
+
+  public forgotPassword = (data: ForgotPasswordPayload) => {
+    return httpRequest.post<ForgotPasswordPayload, any>(`${this.apiPath}/forgot-password`, data)
   }
-  resetPassword = (data: ResetPasswordPayload) => {
-    return httpRequest.post<ResetPasswordPayload, any>('/api/auth/reset-password', data)
+
+  public resetPassword = (data: ResetPasswordPayload) => {
+    return httpRequest.post<ResetPasswordPayload, any>(`${this.apiPath}/reset-password`, data)
   }
-  getProfile = () => {
-    return httpRequest.get<IUser>('/api/auth/profile')
+
+  public getProfile = () => {
+    return httpRequest.get<IUser>(`${this.apiPath}/profile`)
   }
 }
 

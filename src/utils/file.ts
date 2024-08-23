@@ -44,12 +44,12 @@ class FileExtensions {
     const isImage = file.type.split('/')[0] === 'image'
     const errorMgs = []
     if (!isImage) {
-      errorMgs.push(`'${file.name}' is not an image file`)
+      errorMgs.push(`'${file.name}' sai định dạng file ảnh`)
     }
 
-    const isLessThan3MB = file.size / 1024 / 1024 < 3
+    const isLessThan3MB = file.size / 1024 / 1024 < 20
     if (!isLessThan3MB) {
-      errorMgs.push(`Image must smaller than 3MB!`)
+      errorMgs.push(`Ảnh phải có kích thước bé hơn 20MB!`)
     }
 
     return errorMgs

@@ -1,0 +1,7 @@
+export const PITCH_GROUPS_ROUTE = 'pitch-groups'
+export const PERMISSIONS_ROUTE = 'permission'
+export const BRANCHES_ROUTE = 'branches'
+export const PITCHES_ROUTE = 'pitches'
+export const CLASSES_ROUTE = 'classes'
+export const STUDENTS_ROUTE = 'students'
+export const AUTH_ROUTE = 'auth'

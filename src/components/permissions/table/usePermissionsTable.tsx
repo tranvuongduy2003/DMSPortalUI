@@ -18,7 +18,7 @@ export function usePermissionsTable({ onChangePermission }: PermissionsTableHook
       render: (value: string) => <span className='inline-block h6 !text-sm max-w-[155px]'>{value}</span>
     },
     {
-      title: 'Has View',
+      title: 'Xem',
       dataIndex: 'hasView',
       key: 'hasView',
       align: 'center',
@@ -30,7 +30,7 @@ export function usePermissionsTable({ onChangePermission }: PermissionsTableHook
       )
     },
     {
-      title: 'Has Create',
+      title: 'Tạo',
       dataIndex: 'hasCreate',
       key: 'hasCreate',
       align: 'center',
@@ -42,7 +42,7 @@ export function usePermissionsTable({ onChangePermission }: PermissionsTableHook
       )
     },
     {
-      title: 'Has Update',
+      title: 'Cập nhật',
       dataIndex: 'hasUpdate',
       key: 'hasUpdate',
       align: 'center',
@@ -54,7 +54,7 @@ export function usePermissionsTable({ onChangePermission }: PermissionsTableHook
       )
     },
     {
-      title: 'Has Delete',
+      title: 'Xóa',
       dataIndex: 'hasDelete',
       key: 'hasDelete',
       align: 'center',

@@ -18,6 +18,10 @@ class BranchesService implements IBranchesService {
     })
   }
 
+  public getBranchById = (branchId: string) => {
+    return httpRequest.get<IBranch>(`${this.apiPath}/${branchId}`)
+  }
+
   public createBranch = (request: CreateBranchRequest) => {
     return httpRequest.post<CreateBranchRequest, IBranch>(`${this.apiPath}`, request)
   }

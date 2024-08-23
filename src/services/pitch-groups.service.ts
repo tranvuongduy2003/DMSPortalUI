@@ -18,6 +18,10 @@ class PitchGroupsService implements IPitchGroupsService {
     })
   }
 
+  public getPitchGroupById = (pitchGroupId: string) => {
+    return httpRequest.get<IPitchGroup>(`${this.apiPath}/${pitchGroupId}`)
+  }
+
   public createPitchGroup = (request: CreatePitchGroupRequest) => {
     return httpRequest.post<CreatePitchGroupRequest, IPitchGroup>(`${this.apiPath}`, request)
   }

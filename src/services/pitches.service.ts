@@ -18,6 +18,10 @@ class PitchesService implements IPitchesService {
     })
   }
 
+  public getPitchById = (pitchId: string) => {
+    return httpRequest.get<IPitch>(`${this.apiPath}/${pitchId}`)
+  }
+
   public createPitch = (request: CreatePitchRequest) => {
     return httpRequest.post<CreatePitchRequest, IPitch>(`${this.apiPath}`, request)
   }

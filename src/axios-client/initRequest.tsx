@@ -3,6 +3,7 @@ import { authExtensions, isNullOrEmpty } from '@/utils'
 import { authService } from '@/services'
 import { IResponse } from '@/interfaces'
 import { notification } from 'antd'
+import { AUTH_ROUTE } from '@/constants/routes'
 
 const requestConfig: AxiosRequestConfig = {
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -19,7 +20,7 @@ export const axiosInstance = axios.create(requestConfig)
 async function middlewareRefresh(error: AxiosError) {
   try {
     const refreshToken = authExtensions.getRefreshToken()
-    if (isNullOrEmpty(refreshToken)) {
+    if (!isNullOrEmpty(refreshToken)) {
       const { data } = await authService.refreshToken({
         refreshToken
       })
@@ -30,7 +31,7 @@ async function middlewareRefresh(error: AxiosError) {
     }
   } catch (error) {
     authExtensions.logOut()
-    window.location.replace('/login')
+    window.location.replace(`${AUTH_ROUTE}/login`)
     return
   }
 

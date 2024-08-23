@@ -7,6 +7,7 @@ export interface IBranchesService {
     branchId: string,
     filter?: Partial<IPaginationFilter>
   ) => Promise<IResponse<IPagination<IPitch>>>
+  getBranchById: (branchId: string) => Promise<IResponse<IBranch>>
   createBranch: (request: CreateBranchRequest) => Promise<IResponse<IBranch>>
   updateBranch: (branchId: string, request: UpdateBranchRequest) => Promise<IResponse>
   deleteBranch: (branchId: string) => Promise<IResponse>

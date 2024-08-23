@@ -3,8 +3,10 @@ import { IFunction } from '@/interfaces'
 import { IFunctionsService } from './contracts'
 
 class FunctionsService implements IFunctionsService {
-  getFunctions = () => {
-    return httpRequest.get<IFunction[]>('/api/functions')
+  private readonly apiPath = '/api/v1/functions'
+
+  public getFunctions = () => {
+    return httpRequest.get<IFunction[]>(`${this.apiPath}`)
   }
 }
 

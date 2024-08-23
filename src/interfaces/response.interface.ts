@@ -8,7 +8,7 @@ export interface IResponse<T = any> {
 }
 
 export interface IPagination<T> {
-  items: T
+  items: T[]
   metadata: IMetadata
 }
 

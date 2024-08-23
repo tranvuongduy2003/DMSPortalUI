@@ -4,6 +4,7 @@ import { IUser } from './user.interface'
 import { IPitch } from './pitch.interface'
 
 export interface IBranch {
+  id: string
   name: string
   address: string
   numberOfPitches?: number

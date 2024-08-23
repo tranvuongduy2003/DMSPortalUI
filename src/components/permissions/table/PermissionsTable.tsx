@@ -17,10 +17,9 @@ const PermissionsTable = ({ permissions }: PermissionsTableProps) => {
         commandId,
         value
       })
-      notification.success({ message: 'Update permission successfully!' })
-    } catch (error) {
-      console.log('🚀 ~ onChangePermission ~ error:', error)
-      notification.error({ message: 'Failed to update permission' })
+      notification.success({ message: 'Cập nhật quyền thành công!' })
+    } catch (error: any) {
+      notification.error({ message: error.message })
     }
   }
 
@@ -30,7 +29,7 @@ const PermissionsTable = ({ permissions }: PermissionsTableProps) => {
       dataSource={permissions}
       pagination={false}
       locale={{
-        emptyText: 'No permissions found'
+        emptyText: 'Không tìm thấy bất kì quyền nào'
       }}
       rowKey={(record) => record.id}
     />

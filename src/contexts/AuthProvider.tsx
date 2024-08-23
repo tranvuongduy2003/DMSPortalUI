@@ -38,7 +38,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       })
     } catch (error: unknown) {
       setIsLoading(false)
-      console.log('🚀 ~ logIn ~ error:', error)
       notification.error({
         message: (error as IResponse<unknown>).message
       })

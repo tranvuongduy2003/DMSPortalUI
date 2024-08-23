@@ -4,6 +4,7 @@ import { Content } from 'antd/es/layout/layout'
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { Sidebar, LayoutHeader } from '.'
+import { AUTH_ROUTE } from '@/constants/routes'
 
 export const HomeLayout: React.FunctionComponent = () => {
   const {
@@ -13,7 +14,7 @@ export const HomeLayout: React.FunctionComponent = () => {
   const loggedIn = useAuthStore((state) => state.loggedIn)
 
   return !loggedIn ? (
-    <Navigate to='/auth/login' replace />
+    <Navigate to={`/${AUTH_ROUTE}/login`} replace />
   ) : (
     <Layout style={{ minHeight: '100vh' }}>
       <LayoutHeader />

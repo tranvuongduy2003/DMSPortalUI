@@ -1,7 +1,9 @@
+import { PERMISSIONS_ROUTE, PITCH_GROUPS_ROUTE, STUDENTS_ROUTE } from '@/constants/routes'
 import { Menu, MenuProps } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { Key, ReactNode, useState } from 'react'
-import { MdPrivacyTip } from 'react-icons/md'
+import { MdManageAccounts, MdPrivacyTip } from 'react-icons/md'
+import { PiStudentFill } from 'react-icons/pi'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 export interface ISidebarProps {}
@@ -20,7 +22,9 @@ function getItem(label: ReactNode, key: Key, icon?: ReactNode, onClick?: () => v
 
 const items: MenuItem[] = [
   // getItem("Dashboard", "dashboard", <MdDashboard />),
-  getItem('Permissions', 'permissions', <MdPrivacyTip />)
+  getItem('Hành chính', PITCH_GROUPS_ROUTE, <MdManageAccounts />),
+  getItem('Học viên', STUDENTS_ROUTE, <PiStudentFill />),
+  getItem('Quyền', PERMISSIONS_ROUTE, <MdPrivacyTip />)
 ]
 
 export function Sidebar() {
@@ -32,7 +36,7 @@ export function Sidebar() {
     <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
       <Menu
         theme='dark'
-        defaultSelectedKeys={['dashboard']}
+        defaultSelectedKeys={[PITCH_GROUPS_ROUTE]}
         selectedKeys={[pathname.split('/')[1]]}
         mode='inline'
         items={items}

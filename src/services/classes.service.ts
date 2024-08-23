@@ -1,5 +1,5 @@
 import { httpRequest } from '@/axios-client'
-import { IClass, IPagination, IPaginationFilter } from '@/interfaces'
+import { IClass, IPagination, IPaginationFilter, IStudent } from '@/interfaces'
 import { CreateClassRequest, UpdateClassRequest } from '@/types'
 import { IClassesService } from './contracts'
 
@@ -10,6 +10,16 @@ class ClassesService implements IClassesService {
     return httpRequest.get<IPagination<IClass>>(`${this.apiPath}`, {
       params: filter
     })
+  }
+
+  public getStudentsByClassId = (classId: string, filter?: Partial<IPaginationFilter>) => {
+    return httpRequest.get<IPagination<IStudent>>(`${this.apiPath}/${classId}/students`, {
+      params: filter
+    })
+  }
+
+  public getClassById = (classId: string) => {
+    return httpRequest.get<IClass>(`${this.apiPath}/${classId}`)
   }
 
   public createClass = (request: CreateClassRequest) => {

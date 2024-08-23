@@ -18,10 +18,9 @@ export const RolePermissionsTable = ({ permissions, functions }: PermissionsTabl
         functionId,
         value
       })
-      notification.success({ message: 'Update permission successfully!' })
-    } catch (error) {
-      console.log('🚀 ~ onChangePermission ~ error:', error)
-      notification.error({ message: 'Failed to update permission' })
+      notification.success({ message: 'Cập nhật quyền thành công!' })
+    } catch (error: any) {
+      notification.error({ message: error.message })
     }
   }
 
@@ -32,7 +31,7 @@ export const RolePermissionsTable = ({ permissions, functions }: PermissionsTabl
       pagination={false}
       scroll={{ x: 1300 }}
       locale={{
-        emptyText: 'No permissions found'
+        emptyText: 'Không tìm thấy bất kì quyền nào'
       }}
       rowKey={(record) => record.roleId}
     />

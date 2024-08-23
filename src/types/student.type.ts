@@ -21,7 +21,7 @@ export type CreateStudentRequest = {
   motherPhoneNumber?: string
   motherEmail?: string
   status: EStudentStatus
-  note?: CreateNoteRequest
+  note?: CreateNoteRequest | string
 }
 
 export type UpdateStudentRequest = {

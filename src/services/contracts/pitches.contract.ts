@@ -4,6 +4,7 @@ import { CreatePitchRequest, UpdatePitchRequest } from '@/types'
 export interface IPitchesService {
   getPitches: (filter?: Partial<IPaginationFilter>) => Promise<IResponse<IPagination<IPitch>>>
   getClassesByPitchId: (pitchId: string, filter?: Partial<IPaginationFilter>) => Promise<IResponse<IPagination<IClass>>>
+  getPitchById: (pitchId: string) => Promise<IResponse<IPitch>>
   createPitch: (request: CreatePitchRequest) => Promise<IResponse<IPitch>>
   updatePitch: (pitchId: string, request: UpdatePitchRequest) => Promise<IResponse>
   deletePitch: (pitchId: string) => Promise<IResponse>
