@@ -1,0 +1,117 @@
+import { IStudent } from '@/interfaces'
+import { studentsService } from '@/services'
+import { Button, Modal, notification } from 'antd'
+import { AnyObject } from 'antd/es/_util/type'
+import { ColumnsType } from 'antd/es/table'
+import dayjs from 'dayjs'
+import { BiEdit, BiTrash } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
+
+const { confirm } = Modal
+
+export function useUsersTable() {
+  const navigate = useNavigate()
+
+  async function handleDeleteUser(userId: string) {
+    try {
+      await studentsService.deleteStudent(userId)
+      notification.success({
+        message: 'Xóa người dùng thành công!',
+        duration: 0.5,
+        onClose: () => navigate(0)
+      })
+    } catch (error: any) {
+      notification.error({
+        message: error.message
+      })
+    }
+  }
+
+  function showConfirm(userId: string) {
+    return confirm({
+      title: <span className='text-red-600'>Bạn có muốn xóa người dùng này không?</span>,
+      okButtonProps: {
+        className: 'bg-red-600'
+      },
+      okText: 'Xóa',
+      cancelText: 'Hủy',
+      onOk: () => handleDeleteUser(userId),
+      centered: true
+    })
+  }
+
+  const columns: ColumnsType<IStudent | AnyObject> = [
+    {
+      title: 'Username',
+      dataIndex: 'userName',
+      key: 'userName',
+      colSpan: 1
+    },
+    {
+      title: 'Họ tên',
+      dataIndex: 'fullName',
+      key: 'fullName',
+      colSpan: 1
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+      colSpan: 1
+    },
+    {
+      title: 'Số điện thoại',
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
+      colSpan: 1
+    },
+    {
+      title: 'Ngày sinh',
+      dataIndex: 'dob',
+      key: 'dob',
+      colSpan: 1,
+      render: (value: Date) => <span>{dayjs(value).format('DD/MM/YYYY')}</span>
+    },
+    {
+      title: 'Giới tính',
+      dataIndex: 'gender',
+      key: 'gender',
+      colSpan: 1
+    },
+    {
+      title: 'Địa chỉ',
+      dataIndex: 'address',
+      key: 'address',
+      colSpan: 1
+    },
+    {
+      title: 'Quyền',
+      dataIndex: 'roles',
+      key: 'roles',
+      colSpan: 1,
+      render: (value: string[]) => <span>{value.join(', ')}</span>
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      key: 'status',
+      colSpan: 1
+    },
+    {
+      colSpan: 1,
+      render: (_, user) => (
+        <div className='flex items-center justify-center gap-4'>
+          <Button
+            type='primary'
+            icon={<BiEdit />}
+            className='!bg-yellow-600'
+            onClick={() => navigate(`/users/${user.id}`)}
+          />
+          <Button type='primary' icon={<BiTrash />} className='!bg-red-600' onClick={() => showConfirm(user.id)} />
+        </div>
+      )
+    }
+  ]
+
+  return [columns]
+}

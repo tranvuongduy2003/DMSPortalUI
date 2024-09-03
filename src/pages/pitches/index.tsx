@@ -1,5 +1,6 @@
 import { PaginationFilter } from '@/components/common'
 import { PitchesList } from '@/components/pitches'
+import { CreatePitchModal } from '@/components/pitches/CreatePitchModal'
 import { EPageOrder } from '@/enums/pagination.enum'
 import { IBranch, IPagination, IPaginationFilter, IPitch } from '@/interfaces'
 import { branchesService } from '@/services'
@@ -11,6 +12,7 @@ export function PitchesByBranchPage() {
   const { branchId } = useParams()
 
   const [currentBranch, setCurrentBranch] = useState<IBranch>()
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [pitchesPaginataion, setPitchesPagination] = useState<IPagination<IPitch>>()
   const [filter, setFilter] = useState<IPaginationFilter>({
     order: EPageOrder.ASC,
@@ -43,22 +45,27 @@ export function PitchesByBranchPage() {
   }, [branchId, filter])
 
   return (
-    <Space size='large' direction='vertical' style={{ width: '100%' }}>
-      <Typography.Title level={2}>Chi nhánh {currentBranch?.name}</Typography.Title>
-      <div className='flex items-center justify-between'>
-        <Typography.Title level={2}>Quản lý sân</Typography.Title>
-        <Button type='primary'>Tạo sân</Button>
-      </div>
-      <PaginationFilter setFilter={setFilter} />
-      <PitchesList items={pitchesPaginataion?.items ?? []} />
-      <Pagination
-        className='flex justify-center'
-        defaultCurrent={1}
-        pageSize={filter.size}
-        current={filter.page}
-        onChange={(page) => setFilter({ ...filter, page })}
-        total={pitchesPaginataion?.metadata.totalCount}
-      />
-    </Space>
+    <>
+      <Space size='large' direction='vertical' style={{ width: '100%' }}>
+        <Typography.Title level={2}>Chi nhánh {currentBranch?.name}</Typography.Title>
+        <div className='flex items-center justify-between'>
+          <Typography.Title level={2}>Quản lý sân</Typography.Title>
+          <Button type='primary' onClick={() => setIsCreateModalOpen(true)}>
+            Tạo sân
+          </Button>
+        </div>
+        <PaginationFilter setFilter={setFilter} />
+        <PitchesList items={pitchesPaginataion?.items ?? []} />
+        <Pagination
+          className='flex justify-center'
+          defaultCurrent={1}
+          pageSize={filter.size}
+          current={filter.page}
+          onChange={(page) => setFilter({ ...filter, page })}
+          total={pitchesPaginataion?.metadata.totalCount}
+        />
+      </Space>
+      {isCreateModalOpen && <CreatePitchModal isModalOpen={isCreateModalOpen} setIsModalOpen={setIsCreateModalOpen} />}
+    </>
   )
 }

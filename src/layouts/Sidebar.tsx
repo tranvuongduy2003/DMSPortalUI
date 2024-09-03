@@ -1,4 +1,4 @@
-import { PERMISSIONS_ROUTE, PITCH_GROUPS_ROUTE, STUDENTS_ROUTE } from '@/constants/routes'
+import { ADMINISTRATION_ROUTE, PERMISSIONS_ROUTE, PITCH_GROUPS_ROUTE, STUDENTS_ROUTE } from '@/constants/routes'
 import { Menu, MenuProps } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { Key, ReactNode, useState } from 'react'
@@ -22,7 +22,7 @@ function getItem(label: ReactNode, key: Key, icon?: ReactNode, onClick?: () => v
 
 const items: MenuItem[] = [
   // getItem("Dashboard", "dashboard", <MdDashboard />),
-  getItem('Hành chính', PITCH_GROUPS_ROUTE, <MdManageAccounts />),
+  getItem('Hành chính', ADMINISTRATION_ROUTE, <MdManageAccounts />),
   getItem('Học viên', STUDENTS_ROUTE, <PiStudentFill />),
   getItem('Quyền', PERMISSIONS_ROUTE, <MdPrivacyTip />)
 ]

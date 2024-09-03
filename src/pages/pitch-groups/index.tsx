@@ -1,5 +1,6 @@
 import { PaginationFilter } from '@/components/common/PaginationFilter'
 import { PitchGroupsList } from '@/components/pitch-groups'
+import { CreatePitchGroupModal } from '@/components/pitch-groups/CreatePitchGroupModal'
 import { EPageOrder } from '@/enums/pagination.enum'
 import { IPagination, IPaginationFilter, IPitchGroup } from '@/interfaces'
 import { pitchGroupsService } from '@/services'
@@ -8,6 +9,7 @@ import { useEffect, useRef, useState } from 'react'
 
 export function PitchGroupsPage() {
   const [pitchGroupsPaginataion, setPitchGroupsPagination] = useState<IPagination<IPitchGroup>>()
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
   const [filter, setFilter] = useState<IPaginationFilter>({
     order: EPageOrder.ASC,
     orderBy: '',
@@ -33,21 +35,28 @@ export function PitchGroupsPage() {
   }, [filter])
 
   return (
-    <Space size='large' direction='vertical' style={{ width: '100%' }}>
-      <div className='flex items-center justify-between'>
-        <Typography.Title level={2}>Quản lý hành chính</Typography.Title>
-        <Button type='primary'>Tạo đơn vị</Button>
-      </div>
-      <PaginationFilter setFilter={setFilter} />
-      <PitchGroupsList items={pitchGroupsPaginataion?.items ?? []} />
-      <Pagination
-        className='flex justify-center'
-        defaultCurrent={1}
-        pageSize={filter.size}
-        current={filter.page}
-        onChange={(page) => setFilter({ ...filter, page })}
-        total={pitchGroupsPaginataion?.metadata.totalCount}
-      />
-    </Space>
+    <>
+      <Space size='large' direction='vertical' style={{ width: '100%' }}>
+        <div className='flex items-center justify-between'>
+          <Typography.Title level={2}>Quản lý hành chính</Typography.Title>
+          <Button type='primary' onClick={() => setIsCreateModalOpen(true)}>
+            Tạo đơn vị
+          </Button>
+        </div>
+        <PaginationFilter setFilter={setFilter} />
+        <PitchGroupsList items={pitchGroupsPaginataion?.items ?? []} />
+        <Pagination
+          className='flex justify-center'
+          defaultCurrent={1}
+          pageSize={filter.size}
+          current={filter.page}
+          onChange={(page) => setFilter({ ...filter, page })}
+          total={pitchGroupsPaginataion?.metadata.totalCount}
+        />
+      </Space>
+      {isCreateModalOpen && (
+        <CreatePitchGroupModal isModalOpen={isCreateModalOpen} setIsModalOpen={setIsCreateModalOpen} />
+      )}
+    </>
   )
 }

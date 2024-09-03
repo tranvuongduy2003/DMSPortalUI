@@ -1,25 +1,28 @@
 import {
+  ADMINISTRATION_ROUTE,
   AUTH_ROUTE,
   BRANCHES_ROUTE,
   CLASSES_ROUTE,
   PERMISSIONS_ROUTE,
   PITCH_GROUPS_ROUTE,
   PITCHES_ROUTE,
-  STUDENTS_ROUTE
+  STUDENTS_ROUTE,
+  USERS_ROUTE
 } from '@/constants/routes'
 import { AuthProtectedRoute, HomeLayout } from '@/layouts'
 import { ForgotPasswordPage, LoginPage, ResetPasswordPage } from '@/pages/auth'
 import { NotFoundPage } from '@/pages/notfound'
 import { PermissionsPage } from '@/pages/permissions'
 import { PitchGroupsPage } from '@/pages/pitch-groups'
-import { BranchesByPitchGroupPage } from '@/pages/pitch-groups/branches'
-import { PitchesByBranchPage } from '@/pages/pitch-groups/branches/pitches'
-import { ClassesByPitchPage } from '@/pages/pitch-groups/branches/pitches/classes'
-import { StudentsByClassPage } from '@/pages/pitch-groups/branches/pitches/classes/students'
+import { BranchesByPitchGroupPage } from '@/pages/branches'
+import { PitchesByBranchPage } from '@/pages/pitches'
+import { ClassesByPitchPage } from '@/pages/classes'
+import { StudentsByClassPage } from '@/pages/classes/students'
 import { StudentsPage } from '@/pages/students'
 import { CreateStudentPage } from '@/pages/students/create'
 import { UpdateStudentPage } from '@/pages/students/update'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import UsersPage from './pages/users'
 
 function App() {
   return (
@@ -33,28 +36,34 @@ function App() {
         </Route>
 
         <Route path='' element={<HomeLayout />}>
-          {/* PitchGroups */}
-          <Route path={PITCH_GROUPS_ROUTE} element={<PitchGroupsPage />} />
+          {/* Adnministration */}
+          <Route path={ADMINISTRATION_ROUTE} element={<Navigate to={PITCH_GROUPS_ROUTE} />} />
+          <Route path={`${ADMINISTRATION_ROUTE}/${PITCH_GROUPS_ROUTE}`} element={<PitchGroupsPage />} />
           <Route
-            path={`${PITCH_GROUPS_ROUTE}/:pitchGroupId/${BRANCHES_ROUTE}`}
+            path={`${ADMINISTRATION_ROUTE}/${PITCH_GROUPS_ROUTE}/:pitchGroupId/${BRANCHES_ROUTE}`}
             element={<BranchesByPitchGroupPage />}
           />
           <Route
-            path={`${PITCH_GROUPS_ROUTE}/:pitchGroupId/${BRANCHES_ROUTE}/:branchId/${PITCHES_ROUTE}`}
+            path={`${ADMINISTRATION_ROUTE}/${BRANCHES_ROUTE}/:branchId/${PITCHES_ROUTE}`}
             element={<PitchesByBranchPage />}
           />
           <Route
-            path={`${PITCH_GROUPS_ROUTE}/:pitchGroupId/${BRANCHES_ROUTE}/:branchId/${PITCHES_ROUTE}/:pitchId/${CLASSES_ROUTE}`}
+            path={`${ADMINISTRATION_ROUTE}/${PITCHES_ROUTE}/:pitchId/${CLASSES_ROUTE}`}
             element={<ClassesByPitchPage />}
           />
           <Route
-            path={`${PITCH_GROUPS_ROUTE}/:pitchGroupId/${BRANCHES_ROUTE}/:branchId/${PITCHES_ROUTE}/:pitchId/${CLASSES_ROUTE}/:classId/${STUDENTS_ROUTE}`}
+            path={`${ADMINISTRATION_ROUTE}/${CLASSES_ROUTE}/:classId/${STUDENTS_ROUTE}`}
             element={<StudentsByClassPage />}
           />
+
           {/* Students */}
           <Route path={STUDENTS_ROUTE} element={<StudentsPage />} />
           <Route path={`${STUDENTS_ROUTE}/create`} element={<CreateStudentPage />} />
           <Route path={`${STUDENTS_ROUTE}/:studentId`} element={<UpdateStudentPage />} />
+
+          {/* Users */}
+          <Route path={USERS_ROUTE} element={<UsersPage />} />
+
           {/* Permissions */}
           <Route path={PERMISSIONS_ROUTE} element={<PermissionsPage />} />
         </Route>
