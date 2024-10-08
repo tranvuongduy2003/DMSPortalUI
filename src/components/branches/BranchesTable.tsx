@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { BiEdit, BiTrash } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 import { UpdateBranchModal } from './UpdateBranchModal'
+import { ADMINISTRATION_ROUTE, PITCH_GROUPS_ROUTE, BRANCHES_ROUTE } from '@/constants/routes'
 
 const { confirm } = Modal
 
@@ -78,7 +79,16 @@ export const BranchesTable = ({ branches }: BranchesTableProps) => {
       title: 'Cụm sân',
       key: 'pitchGroup',
       colSpan: 1,
-      render: (_, branch) => <span>{branch.pitchGroup?.name}</span>
+      render: (_, branch) => (
+        <Button
+          type='link'
+          onClick={() =>
+            navigate(`/${ADMINISTRATION_ROUTE}/${PITCH_GROUPS_ROUTE}/${branch.pitchGroupId}/${BRANCHES_ROUTE}`)
+          }
+        >
+          {branch.pitchGroup?.name}
+        </Button>
+      )
     },
     {
       title: 'Người quản lý',

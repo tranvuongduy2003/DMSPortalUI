@@ -3,6 +3,7 @@ import { StudentsList } from '@/components/students'
 import { EPageOrder } from '@/enums/pagination.enum'
 import { IPagination, IPaginationFilter, IStudent } from '@/interfaces'
 import { studentsService } from '@/services'
+import { useAppStore } from '@/stores'
 import { Button, notification, Pagination, Space, Typography } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -21,15 +22,20 @@ export function StudentsPage() {
     searchValue: ''
   })
 
+  const setLoading = useAppStore((state) => state.setIsLoading)
+
   const handleFetchStudents = useRef<(() => Promise<void>) | null>(null)
 
   useEffect(() => {
     handleFetchStudents.current = async () => {
+      setLoading(true)
       try {
         const { data } = await studentsService.getStudents(filter)
         setStudentsPagination(data)
       } catch (error: any) {
         notification.error({ message: error?.message })
+      } finally {
+        setLoading(false)
       }
     }
     handleFetchStudents.current()

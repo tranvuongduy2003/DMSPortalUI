@@ -1,71 +1,23 @@
-import { ClassesList } from '@/components/classes'
-import { CreateClassModal } from '@/components/classes/CreateClassModal'
-import { PaginationFilter } from '@/components/common'
-import { EPageOrder } from '@/enums/pagination.enum'
-import { IClass, IPagination, IPaginationFilter, IPitch } from '@/interfaces'
-import { pitchesService } from '@/services'
-import { Button, notification, Pagination, Space, Typography } from 'antd'
-import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { IClass, IPagination, IPaginationFilter } from '@/interfaces'
+import { classesService } from '@/services'
+import { notification } from 'antd'
+import { Dispatch, SetStateAction, useRef } from 'react'
+import { ClassesLayout } from './layout'
 
-export function ClassesByPitchPage() {
-  const { pitchId } = useParams()
-
-  const [currentPitch, setCurrentPitch] = useState<IPitch>()
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
-  const [classesPaginataion, setClassesPagination] = useState<IPagination<IClass>>()
-  const [filter, setFilter] = useState<IPaginationFilter>({
-    order: EPageOrder.ASC,
-    orderBy: '',
-    page: 1,
-    searchBy: '',
-    size: 12,
-    takeAll: false,
-    searchValue: ''
+export function ClassesPage() {
+  const handleFetchClasses = useRef<
+    (
+      filter: IPaginationFilter,
+      setPagination: Dispatch<SetStateAction<IPagination<IClass> | undefined>>
+    ) => Promise<void>
+  >(async (filter, setPagination) => {
+    try {
+      const { data } = await classesService.getClasses(filter)
+      setPagination(data)
+    } catch (error: any) {
+      notification.error({ message: error?.message })
+    }
   })
 
-  const handleFetchClasses = useRef<(() => Promise<void>) | null>(null)
-
-  useEffect(() => {
-    handleFetchClasses.current = async () => {
-      try {
-        await Promise.all([
-          pitchesService.getPitchById(pitchId!).then(({ data }) => {
-            setCurrentPitch(data)
-          }),
-          pitchesService.getClassesByPitchId(pitchId!, filter).then(({ data }) => {
-            setClassesPagination(data)
-          })
-        ])
-      } catch (error: any) {
-        notification.error({ message: error?.message })
-      }
-    }
-    handleFetchClasses.current()
-  }, [pitchId, filter])
-
-  return (
-    <>
-      <Space size='large' direction='vertical' style={{ width: '100%' }}>
-        <Typography.Title level={2}>Sân {currentPitch?.name}</Typography.Title>
-        <div className='flex items-center justify-between'>
-          <Typography.Title level={2}>Quản lý lớp</Typography.Title>
-          <Button type='primary' onClick={() => setIsCreateModalOpen(true)}>
-            Tạo lớp
-          </Button>
-        </div>
-        <PaginationFilter setFilter={setFilter} />
-        <ClassesList items={classesPaginataion?.items ?? []} />
-        <Pagination
-          className='flex justify-center'
-          defaultCurrent={1}
-          pageSize={filter.size}
-          current={filter.page}
-          onChange={(page) => setFilter({ ...filter, page })}
-          total={classesPaginataion?.metadata.totalCount}
-        />
-      </Space>
-      {isCreateModalOpen && <CreateClassModal isModalOpen={isCreateModalOpen} setIsModalOpen={setIsCreateModalOpen} />}
-    </>
-  )
+  return <ClassesLayout fetchClasses={handleFetchClasses.current} type='table' />
 }

@@ -1,3 +1,4 @@
+import { ADMINISTRATION_ROUTE, BRANCHES_ROUTE, PITCHES_ROUTE } from '@/constants/routes'
 import { IPitch } from '@/interfaces'
 import { pitchesService } from '@/services'
 import { Button, Modal, notification, Table } from 'antd'
@@ -72,7 +73,14 @@ export const PitchesTable = ({ pitches }: PitchesTableProps) => {
       title: 'Chi nhánh',
       key: 'branch',
       colSpan: 1,
-      render: (_, pitch) => <span>{pitch.branch?.name}</span>
+      render: (_, pitch) => (
+        <Button
+          type='link'
+          onClick={() => navigate(`/${ADMINISTRATION_ROUTE}/${BRANCHES_ROUTE}/${pitch.branchId}/${PITCHES_ROUTE}`)}
+        >
+          {pitch.branch?.name}
+        </Button>
+      )
     },
     {
       key: 'action',

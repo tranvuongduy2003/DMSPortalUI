@@ -1,11 +1,12 @@
 import { IFunction, IRolePermission } from '@/interfaces'
 import { functionsService, permissionsService } from '@/services'
-import { Spin } from 'antd'
+import { useAppStore } from '@/stores'
 import { useEffect, useRef, useState } from 'react'
 import { RolePermissionsTable } from './table'
 
 export function RolePermissions() {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const setLoading = useAppStore((state) => state.setIsLoading)
+
   const [rolePermissions, setRolePermissions] = useState<IRolePermission[]>([])
   const [functions, setFunctions] = useState<IFunction[]>([])
 
@@ -13,16 +14,16 @@ export function RolePermissions() {
 
   useEffect(() => {
     handleFetchRolePermissions.current = async () => {
-      setIsLoading(true)
+      setLoading(true)
       try {
         await Promise.all([
           permissionsService.getPermissionsByRole().then(({ data }) => setRolePermissions(data)),
           functionsService.getFunctions().then(({ data }) => setFunctions(data))
         ])
-        setIsLoading(false)
       } catch (error) {
         console.log(error)
-        setIsLoading(false)
+      } finally {
+        setLoading(false)
       }
     }
     handleFetchRolePermissions.current()
@@ -31,11 +32,5 @@ export function RolePermissions() {
     }
   }, [])
 
-  return isLoading ? (
-    <div className='flex items-center justify-center w-full'>
-      <Spin spinning={isLoading} size='large' />
-    </div>
-  ) : (
-    <RolePermissionsTable permissions={rolePermissions ?? []} functions={functions ?? []} />
-  )
+  return <RolePermissionsTable permissions={rolePermissions ?? []} functions={functions ?? []} />
 }

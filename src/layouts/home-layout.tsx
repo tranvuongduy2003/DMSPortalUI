@@ -1,5 +1,5 @@
-import { useAuthStore } from '@/stores'
-import { Layout, theme } from 'antd'
+import { useAppStore, useAuthStore } from '@/stores'
+import { Layout, Spin, theme } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
@@ -12,6 +12,7 @@ export const HomeLayout: React.FunctionComponent = () => {
   } = theme.useToken()
 
   const loggedIn = useAuthStore((state) => state.loggedIn)
+  const loading = useAppStore((state) => state.isLoading)
 
   return !loggedIn ? (
     <Navigate to={`/${AUTH_ROUTE}/login`} replace />
@@ -25,7 +26,9 @@ export const HomeLayout: React.FunctionComponent = () => {
       >
         <Sidebar />
         <Content style={{ margin: 24 }}>
-          <Outlet />
+          <Spin spinning={loading} size='large'>
+            <Outlet />
+          </Spin>
         </Content>
       </Layout>
     </Layout>

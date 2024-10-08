@@ -3,6 +3,7 @@ import { StudentsList } from '@/components/students'
 import { EPageOrder } from '@/enums/pagination.enum'
 import { IClass, IPagination, IPaginationFilter, IStudent } from '@/interfaces'
 import { classesService } from '@/services'
+import { useAppStore } from '@/stores'
 import { Button, notification, Pagination, Space, Typography } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -22,10 +23,13 @@ export function StudentsByClassPage() {
     searchValue: ''
   })
 
+  const setLoading = useAppStore((state) => state.setIsLoading)
+
   const handleFetchStudents = useRef<(() => Promise<void>) | null>(null)
 
   useEffect(() => {
     handleFetchStudents.current = async () => {
+      setLoading(true)
       try {
         await Promise.all([
           classesService.getClassById(classId!).then(({ data }) => {
@@ -37,6 +41,8 @@ export function StudentsByClassPage() {
         ])
       } catch (error: any) {
         notification.error({ message: error?.message })
+      } finally {
+        setLoading(false)
       }
     }
     handleFetchStudents.current()

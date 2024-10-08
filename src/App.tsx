@@ -12,7 +12,7 @@ import {
 import { AuthProtectedRoute, HomeLayout } from '@/layouts'
 import { ForgotPasswordPage, LoginPage, ResetPasswordPage } from '@/pages/auth'
 import { BranchesByPitchGroupPage } from '@/pages/branches/branches-by-pitch-group'
-import { ClassesByPitchPage } from '@/pages/classes'
+import { ClassesByPitchPage } from '@/pages/classes/classes-by-pitch'
 import { StudentsByClassPage } from '@/pages/classes/students'
 import { NotFoundPage } from '@/pages/notfound'
 import { PermissionsPage } from '@/pages/permissions'
@@ -26,6 +26,7 @@ import { BranchesPage } from './pages/branches'
 import { PitchGroupsForAdministrationPage } from './pages/pitch-groups/pitch-groups-for-administation'
 import { PitchesByBranchPage } from './pages/pitches/pitches-by-branch'
 import UsersPage from './pages/users'
+import { ClassesPage } from './pages/classes'
 
 function App() {
   return (
@@ -72,7 +73,7 @@ function App() {
           <Route path={PITCHES_ROUTE} element={<PitchesPage />} />
 
           {/* Classes */}
-          <Route path={CLASSES_ROUTE} element={<PitchGroupsPage />} />
+          <Route path={CLASSES_ROUTE} element={<ClassesPage />} />
 
           {/* Students */}
           <Route path={STUDENTS_ROUTE} element={<StudentsPage />} />

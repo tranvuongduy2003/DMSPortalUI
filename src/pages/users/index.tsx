@@ -3,6 +3,7 @@ import { UsersList } from '@/components/users'
 import { EPageOrder } from '@/enums/pagination.enum'
 import { IPagination, IPaginationFilter, IUser } from '@/interfaces'
 import { usersService } from '@/services'
+import { useAppStore } from '@/stores'
 import { Button, notification, Pagination, Space, Typography } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -21,15 +22,20 @@ export default function UsersPage() {
     searchValue: ''
   })
 
+  const setLoading = useAppStore((state) => state.setIsLoading)
+
   const handleFetchUsers = useRef<(() => Promise<void>) | null>(null)
 
   useEffect(() => {
     handleFetchUsers.current = async () => {
+      setLoading(true)
       try {
         const { data } = await usersService.getUsers(filter)
         setUsersPagination(data)
       } catch (error: any) {
         notification.error({ message: error?.message })
+      } finally {
+        setLoading(false)
       }
     }
     handleFetchUsers.current()
