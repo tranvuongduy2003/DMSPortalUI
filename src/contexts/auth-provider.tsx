@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       notification.success({
         message: 'Đăng nhập thành công!',
         duration: 0.25,
-        onClose: () => navigate('/')
+        onClose: () => navigate('/administration/pitch-groups')
       })
     } catch (error: unknown) {
       setIsLoading(false)

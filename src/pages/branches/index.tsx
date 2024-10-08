@@ -1,71 +1,23 @@
-import { BranchesList } from '@/components/branches'
-import { CreateBranchModal } from '@/components/branches/CreateBranchModal'
-import { PaginationFilter } from '@/components/common'
-import { EPageOrder } from '@/enums/pagination.enum'
-import { IBranch, IPagination, IPaginationFilter, IPitchGroup } from '@/interfaces'
-import { pitchGroupsService } from '@/services'
-import { Button, notification, Pagination, Space, Typography } from 'antd'
-import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { IBranch, IPagination, IPaginationFilter } from '@/interfaces'
+import { branchesService } from '@/services'
+import { notification } from 'antd'
+import { Dispatch, SetStateAction, useRef } from 'react'
+import { BranchesLayout } from './layout'
 
-export function BranchesByPitchGroupPage() {
-  const { pitchGroupId } = useParams()
-
-  const [currentPitchGroup, setCurrentPitchGroup] = useState<IPitchGroup>()
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
-  const [branchesPaginataion, setBranchesPagination] = useState<IPagination<IBranch>>()
-  const [filter, setFilter] = useState<IPaginationFilter>({
-    order: EPageOrder.ASC,
-    orderBy: '',
-    page: 1,
-    searchBy: '',
-    size: 12,
-    takeAll: false,
-    searchValue: ''
+export function BranchesPage() {
+  const handleFetchBranches = useRef<
+    (
+      filter: IPaginationFilter,
+      setPagination: Dispatch<SetStateAction<IPagination<IBranch> | undefined>>
+    ) => Promise<void>
+  >(async (filter, setPagination) => {
+    try {
+      const { data } = await branchesService.getBranches(filter)
+      setPagination(data)
+    } catch (error: any) {
+      notification.error({ message: error?.message })
+    }
   })
 
-  const handleFetchBranches = useRef<(() => Promise<void>) | null>(null)
-
-  useEffect(() => {
-    handleFetchBranches.current = async () => {
-      try {
-        await Promise.all([
-          pitchGroupsService.getPitchGroupById(pitchGroupId!).then(({ data }) => {
-            setCurrentPitchGroup(data)
-          }),
-          pitchGroupsService.getBranchesByPitchGroupId(pitchGroupId!, filter).then(({ data }) => {
-            setBranchesPagination(data)
-          })
-        ])
-      } catch (error: any) {
-        notification.error({ message: error?.message })
-      }
-    }
-    handleFetchBranches.current()
-  }, [pitchGroupId, filter])
-
-  return (
-    <>
-      <Space size='large' direction='vertical' style={{ width: '100%' }}>
-        <Typography.Title level={2}>Cụm sân {currentPitchGroup?.name}</Typography.Title>
-        <div className='flex items-center justify-between'>
-          <Typography.Title level={2}>Quản lý chi nhánh</Typography.Title>
-          <Button type='primary' onClick={() => setIsCreateModalOpen(true)}>
-            Tạo chi nhánh
-          </Button>
-        </div>
-        <PaginationFilter setFilter={setFilter} />
-        <BranchesList items={branchesPaginataion?.items ?? []} />
-        <Pagination
-          className='flex justify-center'
-          defaultCurrent={1}
-          pageSize={filter.size}
-          current={filter.page}
-          onChange={(page) => setFilter({ ...filter, page })}
-          total={branchesPaginataion?.metadata.totalCount}
-        />
-      </Space>
-      {isCreateModalOpen && <CreateBranchModal isModalOpen={isCreateModalOpen} setIsModalOpen={setIsCreateModalOpen} />}
-    </>
-  )
+  return <BranchesLayout fetchBranches={handleFetchBranches.current!} type='table' />
 }

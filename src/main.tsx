@@ -9,7 +9,7 @@ import weekday from 'dayjs/plugin/weekday'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
-import { AuthProvider } from './contexts/AuthProvider.tsx'
+import { AuthProvider } from './contexts/auth-provider.tsx'
 import './index.css'
 
 dayjs.extend(customParseFormat)

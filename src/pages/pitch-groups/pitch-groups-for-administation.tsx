@@ -4,7 +4,7 @@ import { notification } from 'antd'
 import { Dispatch, SetStateAction, useRef } from 'react'
 import { PitchGroupsLayout } from './layout'
 
-export function PitchGroupsPage() {
+export function PitchGroupsForAdministrationPage() {
   const handleFetchPitchGroups = useRef<
     (
       filter: IPaginationFilter,
@@ -24,5 +24,5 @@ export function PitchGroupsPage() {
     }
   )
 
-  return <PitchGroupsLayout fetchPitchGroups={handleFetchPitchGroups.current} type='table' />
+  return <PitchGroupsLayout fetchPitchGroups={handleFetchPitchGroups.current} />
 }

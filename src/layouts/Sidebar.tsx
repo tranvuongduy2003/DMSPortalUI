@@ -1,9 +1,20 @@
-import { ADMINISTRATION_ROUTE, PERMISSIONS_ROUTE, PITCH_GROUPS_ROUTE, STUDENTS_ROUTE } from '@/constants/routes'
+import {
+  ADMINISTRATION_ROUTE,
+  BRANCHES_ROUTE,
+  CLASSES_ROUTE,
+  PERMISSIONS_ROUTE,
+  PITCH_GROUPS_ROUTE,
+  PITCHES_ROUTE,
+  STUDENTS_ROUTE
+} from '@/constants/routes'
 import { Menu, MenuProps } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { Key, ReactNode, useState } from 'react'
-import { MdManageAccounts, MdPrivacyTip } from 'react-icons/md'
+import { FaHouseFlag } from 'react-icons/fa6'
+import { GiMeepleGroup } from 'react-icons/gi'
+import { MdClass, MdManageAccounts, MdPrivacyTip } from 'react-icons/md'
 import { PiStudentFill } from 'react-icons/pi'
+import { RiGitBranchFill } from 'react-icons/ri'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 export interface ISidebarProps {}
@@ -23,6 +34,10 @@ function getItem(label: ReactNode, key: Key, icon?: ReactNode, onClick?: () => v
 const items: MenuItem[] = [
   // getItem("Dashboard", "dashboard", <MdDashboard />),
   getItem('Hành chính', ADMINISTRATION_ROUTE, <MdManageAccounts />),
+  getItem('Cụm sân', PITCH_GROUPS_ROUTE, <GiMeepleGroup />),
+  getItem('Chi nhánh', BRANCHES_ROUTE, <RiGitBranchFill />),
+  getItem('Sân', PITCHES_ROUTE, <FaHouseFlag />),
+  getItem('Lớp', CLASSES_ROUTE, <MdClass />),
   getItem('Học viên', STUDENTS_ROUTE, <PiStudentFill />),
   getItem('Quyền', PERMISSIONS_ROUTE, <MdPrivacyTip />)
 ]
