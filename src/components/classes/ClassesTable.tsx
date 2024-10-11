@@ -7,7 +7,8 @@ import { useState } from 'react'
 import { BiEdit, BiTrash } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 import { UpdateClassModal } from './UpdateClassModal'
-import { ADMINISTRATION_ROUTE, PITCHES_ROUTE, CLASSES_ROUTE } from '@/constants/routes'
+import { ADMINISTRATION_ROUTE, PITCHES_ROUTE, CLASSES_ROUTE, USERS_ROUTE } from '@/constants/routes'
+import { EClassStatus, ClassStatusMap } from '@/enums'
 
 const { confirm } = Modal
 
@@ -61,13 +62,25 @@ export const ClassesTable = ({ classes }: ClassesTableProps) => {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      colSpan: 1
+      colSpan: 1,
+      render: (value: EClassStatus) => ClassStatusMap.get(value)
     },
     {
       title: 'Số lượng học viên',
       dataIndex: 'numberOfStudents',
       key: 'numberOfStudents',
       colSpan: 1
+    },
+    {
+      title: 'Giáo viên phụ trách',
+      dataIndex: 'teacher',
+      key: 'teacher',
+      colSpan: 1,
+      render: (_, classData) => (
+        <Button type='link' onClick={() => navigate(`/${USERS_ROUTE}/${classData.teacherId}`)}>
+          {classData.teacher?.fullName}
+        </Button>
+      )
     },
     {
       title: 'Sân',

@@ -7,6 +7,7 @@ import { MdCached } from 'react-icons/md'
 import { RiNumbersFill } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 import { UpdateClassModal } from './UpdateClassModal'
+import { ClassStatusMap } from '@/enums'
 
 export interface IClassCardProps {
   classData: IClass
@@ -49,7 +50,7 @@ export function ClassCard({ classData }: IClassCardProps) {
           <p className='flex items-center gap-2'>
             <MdCached />
             <span>Trạng thái:</span>
-            <span className='font-medium'>{classData.status}</span>
+            <span className='font-medium'>{ClassStatusMap.get(classData.status)}</span>
           </p>
         </div>
       </Card>

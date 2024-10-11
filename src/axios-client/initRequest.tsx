@@ -31,7 +31,7 @@ async function middlewareRefresh(error: AxiosError) {
     }
   } catch (error) {
     authExtensions.logOut()
-    window.location.replace(`${AUTH_ROUTE}/login`)
+    window.location.replace(`/${AUTH_ROUTE}/login`)
     return
   }
 

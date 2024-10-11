@@ -27,6 +27,7 @@ import { PitchGroupsForAdministrationPage } from './pages/pitch-groups/pitch-gro
 import { PitchesByBranchPage } from './pages/pitches/pitches-by-branch'
 import UsersPage from './pages/users'
 import { ClassesPage } from './pages/classes'
+import { UserDetailsPages } from './pages/users/details'
 
 function App() {
   return (
@@ -82,6 +83,7 @@ function App() {
 
           {/* Users */}
           <Route path={USERS_ROUTE} element={<UsersPage />} />
+          <Route path={`${USERS_ROUTE}/:userId`} element={<UserDetailsPages />} />
 
           {/* Permissions */}
           <Route path={PERMISSIONS_ROUTE} element={<PermissionsPage />} />

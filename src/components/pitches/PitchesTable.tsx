@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { BiEdit, BiTrash } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 import { UpdatePitchModal } from './UpdatePitchModal'
+import { EPitchStatus, PitchStatusMap } from '@/enums'
 
 const { confirm } = Modal
 
@@ -67,7 +68,8 @@ export const PitchesTable = ({ pitches }: PitchesTableProps) => {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      colSpan: 1
+      colSpan: 1,
+      render: (value: EPitchStatus) => PitchStatusMap.get(value)
     },
     {
       title: 'Chi nhánh',

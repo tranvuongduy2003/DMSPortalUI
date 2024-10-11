@@ -5,13 +5,15 @@ import {
   PERMISSIONS_ROUTE,
   PITCH_GROUPS_ROUTE,
   PITCHES_ROUTE,
-  STUDENTS_ROUTE
+  STUDENTS_ROUTE,
+  USERS_ROUTE
 } from '@/constants/routes'
 import { Menu, MenuProps } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { Key, ReactNode, useState } from 'react'
 import { FaHouseFlag } from 'react-icons/fa6'
 import { GiMeepleGroup } from 'react-icons/gi'
+import { HiUserGroup } from 'react-icons/hi'
 import { MdClass, MdManageAccounts, MdPrivacyTip } from 'react-icons/md'
 import { PiStudentFill } from 'react-icons/pi'
 import { RiGitBranchFill } from 'react-icons/ri'
@@ -39,6 +41,7 @@ const items: MenuItem[] = [
   getItem('Sân', PITCHES_ROUTE, <FaHouseFlag />),
   getItem('Lớp', CLASSES_ROUTE, <MdClass />),
   getItem('Học viên', STUDENTS_ROUTE, <PiStudentFill />),
+  getItem('Nhân viên', USERS_ROUTE, <HiUserGroup />),
   getItem('Quyền', PERMISSIONS_ROUTE, <MdPrivacyTip />)
 ]
 

@@ -1,8 +1,8 @@
-import { EPitchStatus } from '@/enums'
-import { IPitch } from '@/interfaces'
-import { pitchesService } from '@/services'
+import { EPitchStatus, PitchStatusMap } from '@/enums'
+import { IBranch, IPitch } from '@/interfaces'
+import { branchesService, pitchesService } from '@/services'
 import { UpdatePitchRequest } from '@/types'
-import { Button, Form, Input, Modal, notification, Select } from 'antd'
+import { Button, Form, Input, Modal, notification, Select, Spin } from 'antd'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,6 +17,8 @@ export function UpdatePitchModal({ isModalOpen, setIsModalOpen, pitch, refetch }
   const navigate = useNavigate()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isModalLoading, setIsModalLoading] = useState<boolean>(false)
+  const [branches, setBranches] = useState<IBranch[]>([])
 
   const [form] = Form.useForm<UpdatePitchRequest>()
 
@@ -39,7 +41,9 @@ export function UpdatePitchModal({ isModalOpen, setIsModalOpen, pitch, refetch }
 
       const values = form.getFieldsValue()
 
-      await pitchesService.updatePitch(pitch.id, values)
+      const { id, name, status } = values
+
+      await pitchesService.updatePitch(pitch.id, { id, name, status })
 
       refetch && refetch()
 
@@ -58,6 +62,15 @@ export function UpdatePitchModal({ isModalOpen, setIsModalOpen, pitch, refetch }
     }
   }
 
+  useEffect(() => {
+    ;(async () => {
+      setIsModalLoading(true)
+      const { data } = await branchesService.getBranches({ takeAll: true })
+      setBranches(data.items)
+      setIsModalLoading(false)
+    })()
+  }, [])
+
   return (
     <Modal
       title='Cập nhật sân'
@@ -67,41 +80,57 @@ export function UpdatePitchModal({ isModalOpen, setIsModalOpen, pitch, refetch }
       destroyOnClose={true}
       afterClose={form.resetFields}
     >
-      <Form form={form} size='large' autoComplete='off' labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
-        <Form.Item name='id' className='hidden' />
-        <Form.Item
-          name='name'
-          label={<span className='font-medium'>Tên sân</span>}
-          rules={[
-            { required: true, message: 'Tên sân không được bỏ trống' },
-            {
-              max: 50,
-              message: 'Số kí tự không được vượt quá 50'
-            }
-          ]}
-        >
-          <Input placeholder='Nhập tên của sân' />
-        </Form.Item>
-        <Form.Item name='status' label={<span className='font-medium'>Trạng thái:</span>}>
-          <Select
-            placeholder='Chọn trạng thái'
-            defaultValue={EPitchStatus.AVAILABLE}
-            options={[
-              { value: EPitchStatus.AVAILABLE, label: 'Sân trống' },
-              { value: EPitchStatus.BUSY, label: 'Đang bận' },
-              { value: EPitchStatus.CLOSED, label: 'Đã đóng cửa' },
-              { value: EPitchStatus.RESERVED, label: 'Đã được đặt' },
-              { value: EPitchStatus.UNDER_MAINTENANCE, label: 'Đang sửa chữa' }
-            ]}
-          />
-        </Form.Item>
-        <div className='flex justify-end gap-3'>
-          <Button onClick={() => setIsModalOpen(false)}>Hủy</Button>
-          <Button htmlType='submit' onClick={() => handleUpdatePitch()} type='primary' loading={isLoading}>
-            Cập nhật
-          </Button>
+      {isModalLoading ? (
+        <div className='flex justify-center'>
+          <Spin spinning={isModalLoading} size='large' />
         </div>
-      </Form>
+      ) : (
+        <Form form={form} size='large' autoComplete='off' labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
+          <Form.Item name='id' className='hidden' />
+          <Form.Item
+            name='name'
+            label={<span className='font-medium'>Tên sân:</span>}
+            rules={[
+              { required: true, message: 'Tên sân không được bỏ trống' },
+              {
+                max: 50,
+                message: 'Số kí tự không được vượt quá 50'
+              }
+            ]}
+          >
+            <Input placeholder='Nhập tên của sân' />
+          </Form.Item>
+          <Form.Item name='branchId' label={<span className='font-medium'>Chi nhánh:</span>}>
+            <Select
+              placeholder='Chọn chi nhánh'
+              options={branches.map((branch) => ({ value: branch.id, label: branch.name }))}
+              disabled
+            />
+          </Form.Item>
+          <Form.Item name='numberOfClasses' label={<span className='font-medium'>Số lượng lớp học:</span>}>
+            <Input disabled />
+          </Form.Item>
+          <Form.Item name='status' label={<span className='font-medium'>Trạng thái:</span>}>
+            <Select
+              placeholder='Chọn trạng thái'
+              defaultValue={EPitchStatus.AVAILABLE}
+              options={[
+                { value: EPitchStatus.AVAILABLE, label: PitchStatusMap.get(EPitchStatus.AVAILABLE) },
+                { value: EPitchStatus.BUSY, label: PitchStatusMap.get(EPitchStatus.BUSY) },
+                { value: EPitchStatus.CLOSED, label: PitchStatusMap.get(EPitchStatus.CLOSED) },
+                { value: EPitchStatus.RESERVED, label: PitchStatusMap.get(EPitchStatus.RESERVED) },
+                { value: EPitchStatus.UNDER_MAINTENANCE, label: PitchStatusMap.get(EPitchStatus.UNDER_MAINTENANCE) }
+              ]}
+            />
+          </Form.Item>
+          <div className='flex justify-end gap-3'>
+            <Button onClick={() => setIsModalOpen(false)}>Hủy</Button>
+            <Button htmlType='submit' onClick={() => handleUpdatePitch()} type='primary' loading={isLoading}>
+              Cập nhật
+            </Button>
+          </div>
+        </Form>
+      )}
     </Modal>
   )
 }

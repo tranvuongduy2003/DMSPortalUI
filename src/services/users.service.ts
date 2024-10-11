@@ -12,6 +12,12 @@ class UsersService implements IUsersService {
     })
   }
 
+  public getTeachers = (filter?: Partial<IPaginationFilter>) => {
+    return httpRequest.get<IPagination<IUser>>(`${this.apiPath}/teachers`, {
+      params: filter
+    })
+  }
+
   public getUserById = (UserId: string) => {
     return httpRequest.get<IUser>(`${this.apiPath}/${UserId}`)
   }

@@ -1,4 +1,4 @@
-import { EPitchGroupStatus } from '@/enums'
+import { EPitchGroupStatus, PitchGroupStatusMap } from '@/enums'
 import { IPitchGroup } from '@/interfaces'
 import { pitchGroupsService } from '@/services'
 import { UpdatePitchGroupRequest } from '@/types'
@@ -42,9 +42,9 @@ export function UpdatePitchGroupModal({
     try {
       await form.validateFields()
 
-      const values = form.getFieldsValue()
+      const { id, name, status } = form.getFieldsValue()
 
-      await pitchGroupsService.updatePitchGroup(pitchGroup.id, values)
+      await pitchGroupsService.updatePitchGroup(pitchGroup.id, { id, name, status })
 
       refetch && refetch()
 
@@ -76,7 +76,7 @@ export function UpdatePitchGroupModal({
         <Form.Item name='id' className='hidden' />
         <Form.Item
           name='name'
-          label={<span className='font-medium'>Tên cụm sân</span>}
+          label={<span className='font-medium'>Tên cụm sân:</span>}
           rules={[
             { required: true, message: 'Tên cụm sân không được bỏ trống' },
             {
@@ -87,14 +87,17 @@ export function UpdatePitchGroupModal({
         >
           <Input placeholder='Nhập tên của cụm sân' />
         </Form.Item>
+        <Form.Item name='numberOfBranches' label={<span className='font-medium'>Số lượng chi nhánh:</span>}>
+          <Input disabled />
+        </Form.Item>
         <Form.Item name='status' label={<span className='font-medium'>Trạng thái:</span>}>
           <Select
             placeholder='Chọn trạng thái'
-            defaultValue={EPitchGroupStatus.INACTIVE}
+            defaultValue={EPitchGroupStatus.AVAILABLE}
             options={[
-              { value: EPitchGroupStatus.AVAILABLE, label: 'Đang hoạt động' },
-              { value: EPitchGroupStatus.FULL, label: 'Hết sân' },
-              { value: EPitchGroupStatus.INACTIVE, label: 'Không hoạt động' }
+              { value: EPitchGroupStatus.AVAILABLE, label: PitchGroupStatusMap.get(EPitchGroupStatus.AVAILABLE) },
+              { value: EPitchGroupStatus.FULL, label: PitchGroupStatusMap.get(EPitchGroupStatus.FULL) },
+              { value: EPitchGroupStatus.INACTIVE, label: PitchGroupStatusMap.get(EPitchGroupStatus.INACTIVE) }
             ]}
           />
         </Form.Item>

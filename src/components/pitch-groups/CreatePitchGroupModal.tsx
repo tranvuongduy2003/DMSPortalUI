@@ -1,4 +1,4 @@
-import { EPitchGroupStatus } from '@/enums'
+import { EPitchGroupStatus, PitchGroupStatusMap } from '@/enums'
 import { pitchGroupsService } from '@/services'
 import { CreatePitchGroupRequest } from '@/types'
 import { Button, Form, Input, Modal, notification, Select } from 'antd'
@@ -56,7 +56,7 @@ export function CreatePitchGroupModal({ isModalOpen, setIsModalOpen, refetch }: 
       <Form form={form} size='large' autoComplete='off' labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
         <Form.Item
           name='name'
-          label={<span className='font-medium'>Tên cụm sân</span>}
+          label={<span className='font-medium'>Tên cụm sân:</span>}
           rules={[
             { required: true, message: 'Tên cụm sân không được bỏ trống' },
             {
@@ -70,11 +70,11 @@ export function CreatePitchGroupModal({ isModalOpen, setIsModalOpen, refetch }: 
         <Form.Item name='status' label={<span className='font-medium'>Trạng thái:</span>}>
           <Select
             placeholder='Chọn trạng thái'
-            defaultValue={EPitchGroupStatus.INACTIVE}
+            defaultValue={EPitchGroupStatus.AVAILABLE}
             options={[
-              { value: EPitchGroupStatus.AVAILABLE, label: 'Đang hoạt động' },
-              { value: EPitchGroupStatus.FULL, label: 'Hết sân' },
-              { value: EPitchGroupStatus.INACTIVE, label: 'Không hoạt động' }
+              { value: EPitchGroupStatus.AVAILABLE, label: PitchGroupStatusMap.get(EPitchGroupStatus.AVAILABLE) },
+              { value: EPitchGroupStatus.FULL, label: PitchGroupStatusMap.get(EPitchGroupStatus.FULL) },
+              { value: EPitchGroupStatus.INACTIVE, label: PitchGroupStatusMap.get(EPitchGroupStatus.INACTIVE) }
             ]}
           />
         </Form.Item>

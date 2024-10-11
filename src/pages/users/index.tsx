@@ -49,7 +49,20 @@ export default function UsersPage() {
           Tạo người dùng mới
         </Button>
       </div>
-      <PaginationFilter setFilter={setFilter} />
+      <PaginationFilter
+        orderByFields={[
+          { value: 'dob', label: 'Ngày sinh' },
+          { value: 'numberOfClasses', label: 'Ngày tạo' }
+        ]}
+        searchByFields={[
+          { value: 'userName', label: 'Tên người dung' },
+          { value: 'fullName', label: 'Họ tên' },
+          { value: 'email', label: 'Email' },
+          { value: 'phoneNumber', label: 'Số điện thoại' },
+          { value: 'address', label: 'Địa chỉ' }
+        ]}
+        setFilter={setFilter}
+      />
       <UsersList items={usersPaginataion?.items ?? []} />
       <Pagination
         className='flex justify-center'

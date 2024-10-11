@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { BiEdit, BiTrash } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 import { UpdatePitchGroupModal } from './UpdatePitchGroupModal'
+import { EPitchGroupStatus, PitchGroupStatusMap } from '@/enums'
 
 const { confirm } = Modal
 
@@ -66,7 +67,8 @@ export const PitchGroupsTable = ({ pitchGroups }: PitchGroupsTableProps) => {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      colSpan: 1
+      colSpan: 1,
+      render: (value: EPitchGroupStatus) => PitchGroupStatusMap.get(value)
     },
     {
       key: 'action',

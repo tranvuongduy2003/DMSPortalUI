@@ -1,6 +1,6 @@
 import { IStudent } from '@/interfaces'
 import { Empty } from 'antd'
-import { StudentsTable } from './table'
+import { StudentsTable } from '.'
 
 interface IStudentsList {
   items: IStudent[]

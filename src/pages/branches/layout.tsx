@@ -43,7 +43,17 @@ export function BranchesLayout({ pitchGroup, type = 'card', fetchBranches }: IBr
             Tạo chi nhánh mới
           </Button>
         </div>
-        <PaginationFilter setFilter={setFilter} />
+        <PaginationFilter
+          orderByFields={[
+            { value: 'numberOfPitches', label: 'Số lượng sân' },
+            { value: 'createdAt', label: 'Ngày tạo' }
+          ]}
+          searchByFields={[
+            { value: 'name', label: 'Tên chi nhánh' },
+            { value: 'address', label: 'Địa chỉ' }
+          ]}
+          setFilter={setFilter}
+        />
         {type === 'card' ? (
           <BranchesList items={branchesPaginataion?.items ?? []} />
         ) : type === 'table' ? (

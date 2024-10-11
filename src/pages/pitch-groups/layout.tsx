@@ -41,7 +41,14 @@ export function PitchGroupsLayout({ type = 'card', fetchPitchGroups }: IPitchGro
             Tạo cụm sân mới
           </Button>
         </div>
-        <PaginationFilter setFilter={setFilter} />
+        <PaginationFilter
+          orderByFields={[
+            { value: 'numberOfBranches', label: 'Số lượng chi nhánh' },
+            { value: 'createdAt', label: 'Ngày tạo' }
+          ]}
+          searchByFields={[{ value: 'name', label: 'Tên cụm sân' }]}
+          setFilter={setFilter}
+        />
         {type === 'card' ? (
           <PitchGroupsList items={pitchGroupsPaginataion?.items ?? []} />
         ) : type === 'table' ? (

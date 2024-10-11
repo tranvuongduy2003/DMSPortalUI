@@ -1,6 +1,7 @@
-import { IStudent } from '@/interfaces'
+import { EGender, EUserStatus, GenderMap, RoleMap, UserStatusMap } from '@/enums'
+import { IUser } from '@/interfaces'
 import { studentsService } from '@/services'
-import { Button, Modal, notification } from 'antd'
+import { Button, Modal, notification, Table } from 'antd'
 import { AnyObject } from 'antd/es/_util/type'
 import { ColumnsType } from 'antd/es/table'
 import dayjs from 'dayjs'
@@ -9,7 +10,11 @@ import { useNavigate } from 'react-router-dom'
 
 const { confirm } = Modal
 
-export function useUsersTable() {
+interface UsersTableProps {
+  users: IUser[]
+}
+
+export const UsersTable = ({ users }: UsersTableProps) => {
   const navigate = useNavigate()
 
   async function handleDeleteUser(userId: string) {
@@ -40,9 +45,9 @@ export function useUsersTable() {
     })
   }
 
-  const columns: ColumnsType<IStudent | AnyObject> = [
+  const columns: ColumnsType<IUser | AnyObject> = [
     {
-      title: 'Username',
+      title: 'Tên người dùng',
       dataIndex: 'userName',
       key: 'userName',
       colSpan: 1
@@ -70,13 +75,14 @@ export function useUsersTable() {
       dataIndex: 'dob',
       key: 'dob',
       colSpan: 1,
-      render: (value: Date) => <span>{dayjs(value).format('DD/MM/YYYY')}</span>
+      render: (value: Date) => <span>{value && dayjs(value).format('DD/MM/YYYY')}</span>
     },
     {
       title: 'Giới tính',
       dataIndex: 'gender',
       key: 'gender',
-      colSpan: 1
+      colSpan: 1,
+      render: (value: EGender) => GenderMap.get(value)
     },
     {
       title: 'Địa chỉ',
@@ -89,13 +95,14 @@ export function useUsersTable() {
       dataIndex: 'roles',
       key: 'roles',
       colSpan: 1,
-      render: (value: string[]) => <span>{value.join(', ')}</span>
+      render: (roles: string[]) => <span>{roles?.map((role) => RoleMap.get(role)).join(', ')}</span>
     },
     {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      colSpan: 1
+      colSpan: 1,
+      render: (value: EUserStatus) => UserStatusMap.get(value)
     },
     {
       colSpan: 1,
@@ -113,5 +120,15 @@ export function useUsersTable() {
     }
   ]
 
-  return [columns]
+  return (
+    <Table
+      columns={columns}
+      dataSource={users}
+      pagination={false}
+      locale={{
+        emptyText: 'Không tìm thấy bất kì người dùng nào'
+      }}
+      rowKey={(record) => record.id}
+    />
+  )
 }

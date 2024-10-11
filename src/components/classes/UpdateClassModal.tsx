@@ -1,8 +1,8 @@
-import { EClassStatus } from '@/enums'
-import { IClass } from '@/interfaces'
-import { classesService } from '@/services'
+import { ClassStatusMap, EClassStatus } from '@/enums'
+import { IClass, IPitch, IUser } from '@/interfaces'
+import { classesService, pitchesService, usersService } from '@/services'
 import { UpdateClassRequest } from '@/types'
-import { Button, Form, Input, Modal, notification, Select } from 'antd'
+import { Button, Form, Input, Modal, notification, Select, Spin } from 'antd'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,6 +17,9 @@ export function UpdateClassModal({ isModalOpen, setIsModalOpen, classData, refet
   const navigate = useNavigate()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isModalLoading, setIsModalLoading] = useState<boolean>(false)
+  const [pitches, setPitches] = useState<IPitch[]>([])
+  const [teachers, setTeacher] = useState<IUser[]>([])
 
   const [form] = Form.useForm<UpdateClassRequest>()
 
@@ -37,9 +40,9 @@ export function UpdateClassModal({ isModalOpen, setIsModalOpen, classData, refet
     try {
       await form.validateFields()
 
-      const values = form.getFieldsValue()
+      const { id, name, status, teacherId } = form.getFieldsValue()
 
-      await classesService.updateClass(classData.id, values)
+      await classesService.updateClass(classData.id, { id, name, status, teacherId })
 
       refetch && refetch()
 
@@ -58,6 +61,17 @@ export function UpdateClassModal({ isModalOpen, setIsModalOpen, classData, refet
     }
   }
 
+  useEffect(() => {
+    ;(async () => {
+      setIsModalLoading(true)
+      await Promise.all([
+        pitchesService.getPitches({ takeAll: true }).then(({ data }) => setPitches(data.items)),
+        usersService.getTeachers({ takeAll: true }).then(({ data }) => setTeacher(data.items))
+      ])
+      setIsModalLoading(false)
+    })()
+  }, [])
+
   return (
     <Modal
       title='Cập nhật lớp'
@@ -67,43 +81,72 @@ export function UpdateClassModal({ isModalOpen, setIsModalOpen, classData, refet
       destroyOnClose={true}
       afterClose={form.resetFields}
     >
-      <Form form={form} size='large' autoComplete='off' labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
-        <Form.Item name='id' className='hidden' />
-        <Form.Item
-          name='name'
-          label={<span className='font-medium'>Tên lớp</span>}
-          rules={[
-            { required: true, message: 'Tên lớp không được bỏ trống' },
-            {
-              max: 50,
-              message: 'Số kí tự không được vượt quá 50'
-            }
-          ]}
-        >
-          <Input placeholder='Nhập tên của lớp' />
-        </Form.Item>
-        <Form.Item name='status' label={<span className='font-medium'>Trạng thái:</span>}>
-          <Select
-            placeholder='Chọn trạng thái'
-            defaultValue={EClassStatus.SCHEDULED}
-            options={[
-              { value: EClassStatus.CANCELED, label: 'Đã hủy' },
-              { value: EClassStatus.COMPLETED, label: 'Đã kết thúc' },
-              { value: EClassStatus.FULL, label: 'Đã đầy' },
-              { value: EClassStatus.IN_PROGRESS, label: 'Đang diễn ra' },
-              { value: EClassStatus.OPEN_FOR_ENROLLMENT, label: 'Trong quá trình đăng ký' },
-              { value: EClassStatus.POSTPONED, label: 'Đã bị hoãn' },
-              { value: EClassStatus.SCHEDULED, label: 'Đã lên lịch' }
-            ]}
-          />
-        </Form.Item>
-        <div className='flex justify-end gap-3'>
-          <Button onClick={() => setIsModalOpen(false)}>Hủy</Button>
-          <Button htmlType='submit' onClick={() => handleUpdateClass()} type='primary' loading={isLoading}>
-            Cập nhật
-          </Button>
+      {isModalLoading ? (
+        <div className='flex justify-center'>
+          <Spin spinning={isModalLoading} size='large' />
         </div>
-      </Form>
+      ) : (
+        <Form form={form} size='large' autoComplete='off' labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
+          <Form.Item name='id' className='hidden' />
+          <Form.Item
+            name='name'
+            label={<span className='font-medium'>Tên lớp:</span>}
+            rules={[
+              { required: true, message: 'Tên lớp không được bỏ trống' },
+              {
+                max: 50,
+                message: 'Số kí tự không được vượt quá 50'
+              }
+            ]}
+          >
+            <Input placeholder='Nhập tên của lớp' />
+          </Form.Item>
+          <Form.Item name='pitchId' label={<span className='font-medium'>Sân:</span>}>
+            <Select
+              placeholder='Chọn sân'
+              options={pitches.map((pitch) => ({ value: pitch.id, label: pitch.name }))}
+              disabled
+            />
+          </Form.Item>
+          <Form.Item
+            name='teacherId'
+            rules={[{ required: true, message: 'Giáo viên phụ trách không được bỏ trống' }]}
+            label={<span className='font-medium'>Giáo viên phụ trách:</span>}
+          >
+            <Select
+              placeholder='Chọn giáo viên phụ trách'
+              options={teachers.map((teacher) => ({ value: teacher.id, label: teacher.fullName }))}
+            />
+          </Form.Item>
+          <Form.Item name='numberOfStudents' label={<span className='font-medium'>Số lượng học viên:</span>}>
+            <Input disabled />
+          </Form.Item>
+          <Form.Item name='status' label={<span className='font-medium'>Trạng thái:</span>}>
+            <Select
+              placeholder='Chọn trạng thái'
+              defaultValue={EClassStatus.SCHEDULED}
+              options={[
+                { value: EClassStatus.CANCELED, label: ClassStatusMap.get(EClassStatus.CANCELED) },
+                { value: EClassStatus.COMPLETED, label: ClassStatusMap.get(EClassStatus.COMPLETED) },
+                { value: EClassStatus.FULL, label: ClassStatusMap.get(EClassStatus.FULL) },
+                { value: EClassStatus.IN_PROGRESS, label: ClassStatusMap.get(EClassStatus.IN_PROGRESS) },
+                {
+                  value: EClassStatus.OPEN_FOR_ENROLLMENT,
+                  label: ClassStatusMap.get(EClassStatus.OPEN_FOR_ENROLLMENT)
+                },
+                { value: EClassStatus.POSTPONED, label: ClassStatusMap.get(EClassStatus.POSTPONED) },
+                { value: EClassStatus.SCHEDULED, label: ClassStatusMap.get(EClassStatus.SCHEDULED) }
+              ]}
+            />
+          </Form.Item>
+          <div className='flex justify-end gap-3'>
+            <Button onClick={() => setIsModalOpen(false)}>Hủy</Button>
+            <Button htmlType='submit' onClick={() => handleUpdateClass()} type='primary' loading={isLoading}>
+              Cập nhật
+            </Button>
+          </div>
+        </Form>
+      )}
     </Modal>
   )
 }

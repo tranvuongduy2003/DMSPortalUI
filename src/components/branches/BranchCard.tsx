@@ -8,6 +8,7 @@ import { RiNumbersFill } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 import { UpdateBranchModal } from './UpdateBranchModal'
 import { ADMINISTRATION_ROUTE, BRANCHES_ROUTE, PITCHES_ROUTE } from '@/constants/routes'
+import { BranchStatusMap } from '@/enums'
 
 export interface IBranchCardProps {
   branch: IBranch
@@ -55,7 +56,7 @@ export function BranchCard({ branch }: IBranchCardProps) {
           <p className='flex items-center gap-2'>
             <MdCached />
             <span>Trạng thái:</span>
-            <span className='font-medium'>{branch.status}</span>
+            <span className='font-medium'>{BranchStatusMap.get(branch.status)}</span>
           </p>
         </div>
       </Card>

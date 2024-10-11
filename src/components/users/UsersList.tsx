@@ -1,6 +1,6 @@
 import { IUser } from '@/interfaces'
 import { Empty } from 'antd'
-import { UsersTable } from './table'
+import { UsersTable } from './UsersTable'
 
 interface IUsersList {
   items: IUser[]

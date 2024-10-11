@@ -49,7 +49,20 @@ export function StudentsPage() {
           Đăng ký học viên mới
         </Button>
       </div>
-      <PaginationFilter setFilter={setFilter} />
+      <PaginationFilter
+        orderByFields={[
+          { value: 'height', label: 'Chiều cao' },
+          { value: 'weight', label: 'Cân nặng' },
+          { value: 'dob', label: 'Ngày sinh' },
+          { value: 'numberOfClasses', label: 'Số lớp đã học' },
+          { value: 'createdAt', label: 'Ngày tạo' }
+        ]}
+        searchByFields={[
+          { value: 'fullName', label: 'Họ tên' },
+          { value: 'address', label: 'Địa chỉ' }
+        ]}
+        setFilter={setFilter}
+      />
       <StudentsList items={studentsPaginataion?.items ?? []} />
       <Pagination
         className='flex justify-center'

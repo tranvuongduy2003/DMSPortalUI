@@ -1,4 +1,4 @@
-import { EGender } from '@/enums'
+import { EGender, GenderMap } from '@/enums'
 import { studentsService } from '@/services'
 import { CreateStudentRequest } from '@/types'
 import { Button, DatePicker, Form, Input, notification, Select, Space, Typography } from 'antd'
@@ -107,9 +107,9 @@ export function CreateStudentPage() {
                   placeholder='Chọn giới tính'
                   defaultValue={EGender.MALE}
                   options={[
-                    { value: EGender.MALE, title: 'Nam' },
-                    { value: EGender.FEMALE, title: 'Nữ' },
-                    { value: EGender.OTHER, title: 'Khác' }
+                    { value: EGender.MALE, label: GenderMap.get(EGender.MALE) },
+                    { value: EGender.FEMALE, label: GenderMap.get(EGender.FEMALE) },
+                    { value: EGender.OTHER, label: GenderMap.get(EGender.OTHER) }
                   ]}
                 />
               </Form.Item>

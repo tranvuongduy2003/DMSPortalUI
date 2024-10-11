@@ -43,7 +43,14 @@ export function PitchesLayout({ branch, type = 'card', fetchPitches }: IPitchesL
             Tạo sân
           </Button>
         </div>
-        <PaginationFilter setFilter={setFilter} />
+        <PaginationFilter
+          orderByFields={[
+            { value: 'numberOfClasses', label: 'Số lượng lớp học' },
+            { value: 'createdAt', label: 'Ngày tạo' }
+          ]}
+          searchByFields={[{ value: 'name', label: 'Tên sân' }]}
+          setFilter={setFilter}
+        />
         {type === 'card' ? (
           <PitchesList items={pitchesPaginataion?.items ?? []} />
         ) : type === 'table' ? (

@@ -1,3 +1,4 @@
+import { RoleMap } from '@/enums'
 import { IFunction, IRolePermission } from '@/interfaces'
 import { Checkbox } from 'antd'
 import { AnyObject } from 'antd/es/_util/type'
@@ -31,7 +32,9 @@ export function useRolePermissionsTable({ onChangePermission, functions }: RoleP
       dataIndex: 'roleName',
       key: 'roleName',
       colSpan: 1,
-      render: (value: string) => <span className='inline-block h6 !text-sm max-w-[155px]'>{value}</span>
+      render: (value: string) => (
+        <span className='inline-block h6 !text-sm max-w-[100px] w-[100px]'>{RoleMap.get(value)}</span>
+      )
     },
     ...functionColumns
   ]

@@ -7,6 +7,7 @@ import { RiNumbersFill } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 import { UpdatePitchGroupModal } from './UpdatePitchGroupModal'
 import { ADMINISTRATION_ROUTE, BRANCHES_ROUTE, PITCH_GROUPS_ROUTE } from '@/constants/routes'
+import { PitchGroupStatusMap } from '@/enums'
 
 export interface IPitchGroupCardProps {
   pitchGroup: IPitchGroup
@@ -49,7 +50,7 @@ export function PitchGroupCard({ pitchGroup }: IPitchGroupCardProps) {
           <p className='flex items-center gap-2'>
             <MdCached />
             <span>Trạng thái:</span>
-            <span className='font-medium'>{pitchGroup.status}</span>
+            <span className='font-medium'>{PitchGroupStatusMap.get(pitchGroup.status)}</span>
           </p>
         </div>
       </Card>

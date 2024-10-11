@@ -1,13 +1,13 @@
-import { EPageOrder } from '@/enums/pagination.enum'
+import { EPageOrder, PageOrderMap } from '@/enums/pagination.enum'
 import { IPaginationFilter } from '@/interfaces'
 import { Input, Select } from 'antd'
-import { OptionProps } from 'antd/es/select'
+import { DefaultOptionType } from 'antd/es/select'
 import { Dispatch, SetStateAction } from 'react'
 
 export interface IPaginationFilterProps {
   setFilter: Dispatch<SetStateAction<IPaginationFilter>>
-  orderByFields?: OptionProps[]
-  searchByFields?: OptionProps[]
+  orderByFields?: DefaultOptionType[]
+  searchByFields?: DefaultOptionType[]
 }
 
 export function PaginationFilter({ setFilter, orderByFields, searchByFields }: IPaginationFilterProps) {
@@ -30,9 +30,10 @@ export function PaginationFilter({ setFilter, orderByFields, searchByFields }: I
         <span className='font-medium'>Thứ tự: </span>
         <Select
           style={{ width: 112 }}
+          defaultValue={EPageOrder.ASC}
           options={[
-            { value: EPageOrder.ASC, label: 'Tăng dần' },
-            { value: EPageOrder.DESC, label: 'Giảm dần' }
+            { value: EPageOrder.ASC, label: PageOrderMap.get(EPageOrder.ASC) },
+            { value: EPageOrder.DESC, label: PageOrderMap.get(EPageOrder.DESC) }
           ]}
           onChange={(order) =>
             setFilter((filter) => ({

@@ -7,6 +7,7 @@ import { RiNumbersFill } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
 import { UpdatePitchModal } from './UpdatePitchModal'
 import { ADMINISTRATION_ROUTE, CLASSES_ROUTE, PITCHES_ROUTE } from '@/constants/routes'
+import { PitchStatusMap } from '@/enums'
 
 export interface IPitchCardProps {
   pitch: IPitch
@@ -49,7 +50,7 @@ export function PitchCard({ pitch }: IPitchCardProps) {
           <p className='flex items-center gap-2'>
             <MdCached />
             <span>Trạng thái:</span>
-            <span className='font-medium'>{pitch.status}</span>
+            <span className='font-medium'>{PitchStatusMap.get(pitch.status)}</span>
           </p>
         </div>
       </Card>

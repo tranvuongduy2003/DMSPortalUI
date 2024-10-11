@@ -1,6 +1,7 @@
+import { EGender, EStudentStatus, GenderMap, StudentStatusMap } from '@/enums'
 import { IStudent } from '@/interfaces'
 import { studentsService } from '@/services'
-import { Button, Modal, notification } from 'antd'
+import { Button, Modal, notification, Table } from 'antd'
 import { AnyObject } from 'antd/es/_util/type'
 import { ColumnsType } from 'antd/es/table'
 import dayjs from 'dayjs'
@@ -9,7 +10,11 @@ import { useNavigate } from 'react-router-dom'
 
 const { confirm } = Modal
 
-export function useStudentsTable() {
+interface StudentsTableProps {
+  students: IStudent[]
+}
+
+export const StudentsTable = ({ students }: StudentsTableProps) => {
   const navigate = useNavigate()
 
   async function handleDeleteStudent(studentId: string) {
@@ -65,7 +70,8 @@ export function useStudentsTable() {
       title: 'Giới tính',
       dataIndex: 'gender',
       key: 'gender',
-      colSpan: 1
+      colSpan: 1,
+      render: (value: EGender) => GenderMap.get(value)
     },
     {
       title: 'Chiều cao (cm)',
@@ -83,7 +89,8 @@ export function useStudentsTable() {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      colSpan: 1
+      colSpan: 1,
+      render: (value: EStudentStatus) => StudentStatusMap.get(value)
     },
     {
       title: 'Số lớp đã học',
@@ -107,5 +114,15 @@ export function useStudentsTable() {
     }
   ]
 
-  return [columns]
+  return (
+    <Table
+      columns={columns}
+      dataSource={students}
+      pagination={false}
+      locale={{
+        emptyText: 'Không tìm thấy bất kì lớp nào'
+      }}
+      rowKey={(record) => record.id}
+    />
+  )
 }

@@ -43,7 +43,14 @@ export function ClassesLayout({ pitch, type = 'card', fetchClasses }: IClassesLa
             Tạo lớp mới
           </Button>
         </div>
-        <PaginationFilter setFilter={setFilter} />
+        <PaginationFilter
+          orderByFields={[
+            { value: 'numberOfStudents', label: 'Số lượng học viên' },
+            { value: 'createdAt', label: 'Ngày tạo' }
+          ]}
+          searchByFields={[{ value: 'name', label: 'Tên lớp' }]}
+          setFilter={setFilter}
+        />
         {type === 'card' ? (
           <ClassesList items={classesPaginataion?.items ?? []} />
         ) : type === 'table' ? (

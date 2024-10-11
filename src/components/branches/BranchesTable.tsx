@@ -7,7 +7,8 @@ import { useState } from 'react'
 import { BiEdit, BiTrash } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 import { UpdateBranchModal } from './UpdateBranchModal'
-import { ADMINISTRATION_ROUTE, PITCH_GROUPS_ROUTE, BRANCHES_ROUTE } from '@/constants/routes'
+import { ADMINISTRATION_ROUTE, PITCH_GROUPS_ROUTE, BRANCHES_ROUTE, USERS_ROUTE } from '@/constants/routes'
+import { EBranchStatus, BranchStatusMap } from '@/enums'
 
 const { confirm } = Modal
 
@@ -73,7 +74,8 @@ export const BranchesTable = ({ branches }: BranchesTableProps) => {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      colSpan: 1
+      colSpan: 1,
+      render: (value: EBranchStatus) => BranchStatusMap.get(value)
     },
     {
       title: 'Cụm sân',
@@ -94,7 +96,11 @@ export const BranchesTable = ({ branches }: BranchesTableProps) => {
       title: 'Người quản lý',
       key: 'manager',
       colSpan: 1,
-      render: (_, branch) => <span>{branch.manager?.fullName}</span>
+      render: (_, branch) => (
+        <Button type='link' onClick={() => navigate(`/${USERS_ROUTE}/${branch.managerId}`)}>
+          {branch.manager?.fullName}
+        </Button>
+      )
     },
     {
       key: 'action',
